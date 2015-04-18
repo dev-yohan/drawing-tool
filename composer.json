@@ -1,0 +1,14 @@
+{
+    "name": "yohanmorales/drawing-tool",
+    "authors": [
+        {
+            "name": "yohan morales",
+            "email": "yohanmorales@hotmail.com"
+        }
+    ],
+    "require": {},
+
+    "autoload": {
+        "psr-0": {"DrawingTool\\": "src/"}
+    }
+}
