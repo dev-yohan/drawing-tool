@@ -7,7 +7,7 @@ class ConsoleMessenger implements MessageInterface{
 
   public function printMessage($message){
 
-     echo $message."\n";
+     echo $message;
 
   }
 
