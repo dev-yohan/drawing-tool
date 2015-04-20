@@ -43,13 +43,19 @@ class CommandLineClient {
        $canvas-> draw();
        $this->listenCanvasCommand($canvas, $line);
      }
-     else if($this->regexValidator->validateRegex("/^[L]{1} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}$/", $line)){
+     else if($this->regexValidator->validateRegex("/^[L]{1} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}$/", $line))
+     {
        $coords = explode(" ", $line);
-       if($canvas->validateLineViability($coords[1], $coords[2], $coords[3], $coords[4]))
+       $x1 = intval($coords[1]);
+       $y1 = intval($coords[2]);
+       $x2 = intval($coords[3]);
+       $y2 = intval($coords[4]);
+
+       if($canvas->validateLineViability($x1, $y1, $x2, $y2))
        {
-         if($canvas->validateLineBounds($coords[1], $coords[2], $coords[3], $coords[4]))
+         if($canvas->validateLineBounds($x1, $y1, $x2, $y2))
          {
-           $canvas->drawLine($coords[1], $coords[2], $coords[3], $coords[4]);
+           $canvas->drawLine($x1, $y1, $x2, $y2);
            $canvas-> draw();
          }
          else
@@ -57,11 +63,18 @@ class CommandLineClient {
            $this->messenger->printMessage("Line is out of bounds!\n");
          }
        }
-       else{
+       else
+       {
          $this->messenger->printMessage("Diagonal lines are not supported!\n");
        }
 
        $this->listenCanvasCommand($canvas, $line);
+     }
+     else if($this->regexValidator->validateRegex("/^[B]{1} [0-9]{1,2} [0-9]{1,2} [a-z]{1}$/", $line))
+     {
+       $coords = explode(" ", $line);
+       $canvas->fillArea(intval($coords[1]), intval($coords[2]), " ", $coords[3]);
+       $canvas-> draw();
      }
      else
      {

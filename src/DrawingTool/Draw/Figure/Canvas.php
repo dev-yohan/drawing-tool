@@ -29,7 +29,7 @@ class Canvas implements DrawableInterface{
 
    }
 
-   
+
    public function validateLineViability($x1, $y1, $x2, $y2){
      if($x1 == $x2 || $y1 == $y2)
      {return true;}
@@ -57,6 +57,37 @@ class Canvas implements DrawableInterface{
      }
 
    }
+
+  /**
+  Flood-fill (node, target-color, replacement-color):
+    1. If target-color is equal to replacement-color, return.
+    2. If the color of node is not equal to target-color, return.
+    3. Set the color of node to replacement-color.
+    4. Perform Flood-fill (one step to the west of node, target-color, replacement-color).
+      Perform Flood-fill (one step to the east of node, target-color, replacement-color).
+      Perform Flood-fill (one step to the north of node, target-color, replacement-color).
+      Perform Flood-fill (one step to the south of node, target-color, replacement-color).
+    5. Return.
+  **/
+   public function fillArea($x, $y, $target_color, $replacement_color) {
+
+     if($x < 1 || $y < 1 || $x > $this->width || $y > $this->height){
+       return;
+     }
+
+       if($this->pixels[$y-1][$x-1] != $target_color)
+        {return;}
+
+
+       $this->pixels[$y-1][$x-1] = $replacement_color;
+       
+       $this->fillArea($x-1, $y, $target_color, $replacement_color);
+       $this->fillArea($x+1, $y, $target_color, $replacement_color);
+       $this->fillArea($x, $y-1, $target_color, $replacement_color);
+       $this->fillArea($x, $y+1, $target_color, $replacement_color);
+
+    }
+
 
    public function draw(){
 
