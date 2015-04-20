@@ -29,14 +29,29 @@ class Canvas implements DrawableInterface{
 
    }
 
+   
+   public function validateLineViability($x1, $y1, $x2, $y2){
+     if($x1 == $x2 || $y1 == $y2)
+     {return true;}
+     else
+     {return false;}
+   }
+
+   public function validateLineBounds($x1, $y1, $x2, $y2){
+     if($x1 <= $this->width && $x2 <= $this->width && $y1 <= $this->height && $y2 <= $this->height)
+     {return true;}
+     else
+     {return false;}
+   }
+
    public function drawLine($x1, $y1, $x2, $y2){
 
-     for($i = 0; $i < $this->height; $i++)
+     for($i = 0; $i < $this->width; $i++)
      {
-       for($j = 0; $j < $this->width; $j++)
+       for($j = 0; $j < $this->height; $j++)
        {
          if($i>= $x1-1 && $i <= $x2-1 && $j>= $y1-1 && $j <= $y2-1){
-           $this->pixels[$i][$j] = "x"; 
+           $this->pixels[$j][$i] = "x";
          }
        }
      }

@@ -34,7 +34,7 @@ class CommandLineClient {
 
     $this->messenger->printMessage("enter command: ");
     $handle = fopen ('php://stdin','r');
-    $line = rtrim(fgets($handle), "\r\n");
+    $line = trim(fgets($handle), "\r\n");
 
      if($this->regexValidator->validateRegex("/^[C]{1} [0-9]{1,2} [0-9]{1,2}$/", $line)){
        $components = explode(" ", $line);
@@ -44,9 +44,28 @@ class CommandLineClient {
        $this->listenCanvasCommand($canvas, $line);
      }
      else if($this->regexValidator->validateRegex("/^[L]{1} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}$/", $line)){
-       $components = explode(" ", $line);
-       $canvas->drawLine($components[1], $components[2], $components[3], $components[4]);
-       $canvas-> draw();
+       $coords = explode(" ", $line);
+       if($canvas->validateLineViability($coords[1], $coords[2], $coords[3], $coords[4]))
+       {
+         if($canvas->validateLineBounds($coords[1], $coords[2], $coords[3], $coords[4]))
+         {
+           $canvas->drawLine($coords[1], $coords[2], $coords[3], $coords[4]);
+           $canvas-> draw();
+         }
+         else
+         {
+           $this->messenger->printMessage("Line is out of bounds!\n");
+         }
+       }
+       else{
+         $this->messenger->printMessage("Diagonal lines are not supported!\n");
+       }
+
+       $this->listenCanvasCommand($canvas, $line);
+     }
+     else
+     {
+       $this->messenger->printMessage("Invalid command\n");
        $this->listenCanvasCommand($canvas, $line);
      }
 
@@ -56,17 +75,15 @@ class CommandLineClient {
 
     $this->messenger->printMessage($message);
     $handle = fopen ('php://stdin','r');
-    $line = rtrim(fgets($handle), "\r\n");
+    $line = trim(fgets($handle), "\r\n");
 
     if($line === 'Q')
     {return false;}
 
     if (!$this->regexValidator->validateRegex($regex, $line)) {
-      $this->messenger->printMessage("Invalid Entry ".$line." ".$regex."\n");
+      $this->messenger->printMessage("Invalid Entry\n");
         return false;
     } else {
-      //$this->messenger->printMessage("Continuing...\n");
-        //return $line;
         return true;
     }
 
@@ -77,17 +94,15 @@ class CommandLineClient {
 
     $this->messenger->printMessage($message);
     $handle = fopen ('php://stdin','r');
-    $line = rtrim(fgets($handle), "\r\n");
+    $line = trim(fgets($handle), "\r\n");
 
     if($line === 'Q')
     {return false;}
 
     if (!$this->regexValidator->validateRegex($regex, $line)) {
-      $this->messenger->printMessage("Invalid Entry ".$line." ".$regex."\n");
+      $this->messenger->printMessage("Invalid Entry\n");
         return $this->askForCommand($message, $regex, $line);
     } else {
-      //$this->messenger->printMessage("Continuing...\n");
-        //return $line;
         return true;
     }
 
