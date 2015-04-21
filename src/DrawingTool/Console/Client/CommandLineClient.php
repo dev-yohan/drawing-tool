@@ -20,7 +20,6 @@ class CommandLineClient {
   }
 
   function startCommandInteraction(&$line){
-
     $line = '';
     return $this->askForCommand("Write YES to start!, write Q to quit: ", "/^[A-Z]{3}$/", $line);
   }
@@ -45,41 +44,71 @@ class CommandLineClient {
      }
      else if($this->regexValidator->validateRegex("/^[L]{1} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}$/", $line))
      {
-       $coords = explode(" ", $line);
-       $x1 = intval($coords[1]);
-       $y1 = intval($coords[2]);
-       $x2 = intval($coords[3]);
-       $y2 = intval($coords[4]);
+         $coords = explode(" ", $line);
+         $x1 = intval($coords[1]);
+         $y1 = intval($coords[2]);
+         $x2 = intval($coords[3]);
+         $y2 = intval($coords[4]);
 
-       if($canvas->validateLineViability($x1, $y1, $x2, $y2))
-       {
-         if($canvas->validateLineBounds($x1, $y1, $x2, $y2))
+         if($canvas->validateLineViability($x1, $y1, $x2, $y2))
          {
-           $canvas->drawLine($x1, $y1, $x2, $y2);
-           $canvas-> draw();
+           if($canvas->validateLineBounds($x1, $y1, $x2, $y2))
+           {
+             $canvas->drawLine($x1, $y1, $x2, $y2);
+             $canvas-> draw();
+           }
+           else
+           {  $this->messenger->printMessage("Line is out of bounds!\n"); }
          }
          else
-         {
-           $this->messenger->printMessage("Line is out of bounds!\n");
-         }
-       }
-       else
-       {
-         $this->messenger->printMessage("Diagonal lines are not supported!\n");
-       }
+         {  $this->messenger->printMessage("Diagonal lines are not supported!\n");  }
 
-       $this->listenCanvasCommand($canvas, $line);
+         $this->listenCanvasCommand($canvas, $line);
+     }
+     else if($this->regexValidator->validateRegex("/^[R]{1} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2} [0-9]{1,2}$/", $line))
+     {
+         $coords = explode(" ", $line);
+         $x1 = intval($coords[1]);
+         $y1 = intval($coords[2]);
+         $x2 = intval($coords[3]);
+         $y2 = intval($coords[4]);
+
+         if($canvas->validateRectangleViability($x1, $y1, $x2, $y2)){
+           if($canvas->validateLineBounds($x1, $y1, $x2, $y2))
+           {
+             $canvas->drawRectangle($x1, $y1, $x2, $y2);
+             $canvas-> draw();
+           }
+           else
+           {$this->messenger->printMessage("Rectangle is out of bounds!\n");}
+         }
+         else
+         {$this->messenger->printMessage("Rectangle is not viable\n");}
+
+         $this->listenCanvasCommand($canvas, $line);
+
      }
      else if($this->regexValidator->validateRegex("/^[B]{1} [0-9]{1,2} [0-9]{1,2} [a-z]{1}$/", $line))
      {
-       $coords = explode(" ", $line);
-       $canvas->fillArea(intval($coords[1]), intval($coords[2]), " ", $coords[3]);
-       $canvas-> draw();
+         $coords = explode(" ", $line);
+         $x = intval($coords[1]);
+         $y = intval($coords[2]);
+         $color = $coords[3];
+
+         if($canvas->validatePointViability($x, $y)){
+           $canvas->fillArea(intval($coords[1]), intval($coords[2]),  $coords[3]);
+           $canvas-> draw();
+         }
+         else
+         {$this->messenger->printMessage("Point is out of bounds\n");}
+         $this->listenCanvasCommand($canvas, $line);
      }
+     else if($this->regexValidator->validateRegex("/^[Q]{1}$/", $line))
+     {  $this->messenger->printMessage("Tool reseted\n"); }
      else
      {
-       $this->messenger->printMessage("Invalid command\n");
-       $this->listenCanvasCommand($canvas, $line);
+         $this->messenger->printMessage("Invalid command\n");
+         $this->listenCanvasCommand($canvas, $line);
      }
 
   }
