@@ -7,7 +7,7 @@ $git clone https://github.com/dev-yohan/drawing-tool.git <your_folder>
 $cd <your_folder>
 ```
 #2. How to execute
-From a shell window go to <your_folder> and execute:
+From a shell window go to your_folder and execute:
 ```
 $cd <your_folder>
 $php drawing_tool.php
