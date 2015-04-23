@@ -5,7 +5,6 @@ In your shell please execute:
 ```
 $git clone https://github.com/dev-yohan/drawing-tool.git <your_folder>
 $cd <your_folder>
-$php composer.phar install
 ```
 #2. How to execute
 From a shell window go to <your_folder> and execute:
