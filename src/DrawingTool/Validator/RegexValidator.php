@@ -2,6 +2,7 @@
 
 namespace DrawingTool\Validator;
 
+
 class RegexValidator {
 
   function validateRegex($regex, $string) {
