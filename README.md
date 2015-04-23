@@ -121,7 +121,7 @@ enter command: B 9 9 o
  -  -  -  -  -  -  -  -  -  -  -  -
 ```
 #5. Unit tests
-To run PHPUnit test execute
+To run PHPUnit tests execute
 ```
 $cd <your_folder>
 $/vendor/bin/phpunit
